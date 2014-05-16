@@ -80,7 +80,7 @@ func (f poly) Add(g poly) poly {
 		max_deg = deg2
 	}
 
-	res := make([]complex128, max_deg)
+	res := make([]complex128, max_deg+1)
 
 	for i := range res {
 		var fi, gi complex128
@@ -120,7 +120,7 @@ func (f poly) Subtract(g poly) poly {
 func (f poly) Multiply(g poly) poly {
 	deg := f.Degree() + g.Degree()
 
-	res := make([]complex128, deg)
+	res := make([]complex128, deg+1)
 
 	for i := range res {
 		for j := 0; j <= i; j++ {
@@ -153,9 +153,8 @@ func (f poly) Equal(g poly) bool {
 		return false
 	}
 
-	if deg1 < len(f) {
-		f = f[:deg1+1]
-	}
+	f = f.Normalise()
+	g = g.Normalise()
 
 	for i := range f {
 		if f[i] != g[i] {

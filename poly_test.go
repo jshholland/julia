@@ -99,7 +99,7 @@ func TestAdd(t *testing.T) {
 		in2 := poly(test.in2)
 		out := poly(test.out)
 		sum := in1.Add(in2)
-		t.Logf("%v + %v = %v", in1, in2, sum)
+		t.Logf("(%v) + (%v) = %v", in1, in2, sum)
 		if !sum.Equal(out) {
 			t.Error("did not get expected", out)
 		}
@@ -112,7 +112,7 @@ func TestMultiply(t *testing.T) {
 		{[]complex128{1}, []complex128{}, []complex128{}},
 		{[]complex128{1}, []complex128{1, 1}, []complex128{1, 1}},
 		{[]complex128{4, 4, 1}, []complex128{1, 2, 1}, []complex128{4, 12, 13, 6, 1}},
-		{[]complex128{1, -2, 1}, []complex128{1, 1, 1, 1}, []complex128{1, 1, 0, 0, -1, 1}},
+		{[]complex128{1, -2, 1}, []complex128{1, 1, 1, 1}, []complex128{1, -1, 0, 0, -1, 1}},
 	}
 	for _, test := range tests {
 		in1 := poly(test.in1)
