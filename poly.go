@@ -50,11 +50,13 @@ func (f poly) Degree() int {
 }
 
 // Normalise returns a new poly with any excess zeroes culled from the end.
+//
+// The normalised form of zero is {0}, not {}.
 func (f poly) Normalise() poly {
 	deg := f.Degree()
 
-	if deg == 0 && len(f) > 0 && f[0] == 0 {
-		return poly([]complex128{})
+	if len(f) == 0 {
+		return poly([]complex128{0})
 	}
 
 	if deg < len(f) {
@@ -168,10 +170,7 @@ func (f poly) Equal(g poly) bool {
 func (f poly) String() string {
 	b := new(bytes.Buffer)
 
-	if len(f) == 0 {
-		return "0"
-	}
-
+	f = f.Normalise()
 	fmt.Fprint(b, f[0])
 
 	if len(f) >= 2 {
@@ -201,9 +200,9 @@ func (f poly) Evaluate(z complex128) complex128 {
 	return res
 }
 
-// NewPoly returns a Function coefficients coeffs, starting with the constant term.
-func NewPoly(coeffs ...complex128) Function {
-	return poly(coeffs)
+// NewPoly returns a poly with coefficients coeffs, starting with the constant term.
+func NewPoly(coeffs ...complex128) poly {
+	return poly(coeffs).Normalise()
 }
 
 // A rat is a rational function.
