@@ -23,8 +23,15 @@ type ArithData struct {
 	out []complex128
 }
 
-func run_tests(f Function, t *testing.T, tests []EvalData) {
-	t.Log("testing", f)
+func TestPolyEvaluate(t *testing.T) {
+	f := NewPoly(1, 2, 1)
+	tests := []EvalData{
+		{0, 1},
+		{1, 4},
+		{1i, 2i},
+		{1 + 1i, 3 + 4i},
+		{2 - 3i, -18i},
+	}
 	for _, test := range tests {
 		val := f.Evaluate(test.in)
 		t.Logf("testing at %v, got %v", test.in, val)
@@ -34,21 +41,8 @@ func run_tests(f Function, t *testing.T, tests []EvalData) {
 	}
 }
 
-func TestPolyIntegers(t *testing.T) {
-	f := NewPoly(1, 2, 1)
-	tests := []EvalData{
-		{0, 1},
-		{1, 4},
-		{1i, 2i},
-		{1 + 1i, 3 + 4i},
-		{2 - 3i, -18i},
-	}
-	run_tests(f, t, tests)
-}
-
-func TestDegree(t *testing.T) {
+func TestPolyDegree(t *testing.T) {
 	tests := []DegreeData{
-		{poly([]complex128{}), 0},
 		{poly([]complex128{0}), 0},
 		{poly([]complex128{1}), 0},
 		{poly([]complex128{0, 1}), 1},
@@ -63,11 +57,10 @@ func TestDegree(t *testing.T) {
 	}
 }
 
-func TestNormalise(t *testing.T) {
+func TestPolyNormalise(t *testing.T) {
 	tests := []NormData{
-		{[]complex128{}, []complex128{}},
-		{[]complex128{0}, []complex128{}},
-		{[]complex128{0, 0}, []complex128{}},
+		{[]complex128{0}, []complex128{0}},
+		{[]complex128{0, 0}, []complex128{0}},
 		{[]complex128{1}, []complex128{1}},
 		{[]complex128{1, 0, 1}, []complex128{1, 0, 1}},
 		{[]complex128{1, 0, 1, 0}, []complex128{1, 0, 1}},
@@ -84,10 +77,30 @@ func TestNormalise(t *testing.T) {
 	}
 }
 
-func TestAdd(t *testing.T) {
+func TestPolyEqual(t *testing.T) {
+	var f, g poly
+
+	f = NewPoly()
+	g = NewPoly(0, 0, 0)
+	if !f.Equal(g) {
+		t.Errorf("%v != %v", f, g)
+	}
+
+	g = NewPoly(1)
+	if f.Equal(g) {
+		t.Errorf("%v == %v", f, g)
+	}
+
+	f = NewPoly(4, 4, 1)
+	g = NewPoly(4, 4, 1)
+	if !f.Equal(g) {
+		t.Errorf("%v != %v", f, g)
+	}
+}
+
+func TestPolyAdd(t *testing.T) {
 	tests := []ArithData{
-		{[]complex128{}, []complex128{}, []complex128{}},
-		{[]complex128{1}, []complex128{}, []complex128{1}},
+		{[]complex128{1}, []complex128{0}, []complex128{1}},
 		{[]complex128{1}, []complex128{1, 1}, []complex128{2, 1}},
 		{[]complex128{4, 4, 1}, []complex128{1, 2, 3}, []complex128{5, 6, 4}},
 		{[]complex128{2, 1}, []complex128{-5}, []complex128{-3, 1}},
@@ -106,7 +119,29 @@ func TestAdd(t *testing.T) {
 	}
 }
 
-func TestMultiply(t *testing.T) {
+func TestPolySubtract(t *testing.T) {
+	tests := []ArithData{
+		{[]complex128{}, []complex128{}, []complex128{}},
+		{[]complex128{1}, []complex128{}, []complex128{1}},
+		{[]complex128{1}, []complex128{1, 1}, []complex128{0, -1}},
+		{[]complex128{4, 4, 1}, []complex128{1, 2, 3}, []complex128{3, 2, -2}},
+		{[]complex128{2, 1}, []complex128{-5}, []complex128{7, 1}},
+		{[]complex128{2, 1, 4, 1}, []complex128{1 + 1i}, []complex128{1 - 1i, 1, 4, 1}},
+		{[]complex128{2, 1}, []complex128{-1, 3, -3, 1}, []complex128{3, -2, 3, -1}},
+	}
+	for _, test := range tests {
+		in1 := poly(test.in1)
+		in2 := poly(test.in2)
+		out := poly(test.out)
+		sum := in1.Subtract(in2)
+		t.Logf("(%v) + (%v) = %v", in1, in2, sum)
+		if !sum.Equal(out) {
+			t.Error("did not get expected", out)
+		}
+	}
+}
+
+func TestPolyMultiply(t *testing.T) {
 	tests := []ArithData{
 		{[]complex128{}, []complex128{}, []complex128{}},
 		{[]complex128{1}, []complex128{}, []complex128{}},
