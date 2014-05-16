@@ -66,9 +66,8 @@ func (f poly) Normalise() poly {
 	return f
 }
 
-// IsConstant checks whether the (normalised) polynomial is constant.
 func (f poly) IsConstant() bool {
-	return len(f) <= 1
+	return f.Degree() == 0
 }
 
 func (f poly) Add(g poly) poly {
@@ -165,6 +164,20 @@ func (f poly) Equal(g poly) bool {
 	}
 
 	return true
+}
+
+func (f poly) Derivative() poly {
+	if f.IsConstant() {
+		return poly([]complex128{0})
+	}
+
+	res := make([]complex128, f.Degree())
+
+	for i := range res {
+		res[i] = complex(float64(i+1), 0) * f[i+1]
+	}
+
+	return poly(res)
 }
 
 func (f poly) String() string {

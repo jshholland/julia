@@ -160,3 +160,23 @@ func TestPolyMultiply(t *testing.T) {
 		}
 	}
 }
+
+func TestPolyDeriv(t *testing.T) {
+	tests := []NormData{
+		{[]complex128{0}, []complex128{0}},
+		{[]complex128{5}, []complex128{0}},
+		{[]complex128{0, 1}, []complex128{1}},
+		{[]complex128{0, 0, 1}, []complex128{0, 2}},
+		{[]complex128{9, 6, 1}, []complex128{6, 2}},
+		{[]complex128{1, 4, 6, 4, 1}, []complex128{4, 12, 12, 4}},
+	}
+	for _, test := range tests {
+		in := poly(test.in)
+		out := poly(test.out)
+		deriv := in.Derivative()
+		t.Logf("d/dt (%v) = %v", in, deriv)
+		if !deriv.Equal(out) {
+			t.Error("did not get expected %v", out)
+		}
+	}
+}
