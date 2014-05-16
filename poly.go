@@ -244,5 +244,8 @@ type rat struct {
 func (f rat) Evaluate(z complex128) complex128 {
 	num := f.numerator.Evaluate(z)
 	denom := f.denominator.Evaluate(z)
+	if denom == 0 {
+		return cmplx.Inf()
+	}
 	return num / denom
 }
