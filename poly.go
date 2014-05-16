@@ -27,17 +27,6 @@ type Function interface {
 	Evaluate(z complex128) complex128
 }
 
-// A constant represents a constant function.
-type constant complex128
-
-func (c constant) String() string {
-	return fmt.Sprint(complex128(c))
-}
-
-func (f constant) Evaluate(z complex128) complex128 {
-	return complex128(f)
-}
-
 // A poly is a (complex) polynomial.
 type poly []complex128
 

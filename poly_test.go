@@ -28,18 +28,6 @@ func run_tests(f Function, t *testing.T, tests []EvalData) {
 	}
 }
 
-func TestConstantZero(t *testing.T) {
-	c := constant(0)
-	tests := []EvalData{
-		{0, 0},
-		{1, 0},
-		{1i, 0},
-		{1 + 1i, 0},
-		{200 - 50i, 0},
-	}
-	run_tests(c, t, tests)
-}
-
 func TestPolyIntegers(t *testing.T) {
 	f := NewPoly(1, 2, 1)
 	tests := []EvalData{
