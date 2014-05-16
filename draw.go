@@ -23,6 +23,12 @@ func (c coords) At(x, y int) complex128 {
 	return complex(re, im)
 }
 
+func (c coords) Pixel(z complex128) (int, int) {
+	x := int(real(z-c.origin) / c.pix_size)
+	y := int(imag(z-c.origin) / c.pix_size)
+	return x, y
+}
+
 func Draw(f Function, re_from, re_to, im_from, im_to float64, pix_size float64) image.Image {
 	w := re_to - re_from
 	h := im_to - im_from
