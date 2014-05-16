@@ -167,24 +167,26 @@ func (f poly) Equal(g poly) bool {
 }
 
 func (f poly) String() string {
-	var b bytes.Buffer
+	b := new(bytes.Buffer)
 
 	if len(f) == 0 {
 		return "0"
 	}
 
-	b.WriteString(fmt.Sprint(f[0]))
+	fmt.Fprint(b, f[0])
 
 	if len(f) >= 2 {
-		part := fmt.Sprintf(" + %vt", f[1])
-		b.WriteString(part)
+		if f[1] != 0 {
+			fmt.Fprintf(b, " + %vt", f[1])
+		}
 	} else {
 		return b.String()
 	}
 
 	for i, z := range f[2:] {
-		part := fmt.Sprintf(" + %vt^%v", z, i+2)
-		b.WriteString(part)
+		if z != 0 {
+			fmt.Fprintf(b, " + %vt^%v", z, i+2)
+		}
 	}
 
 	return b.String()
