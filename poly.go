@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"math/cmplx"
 )
 
 // pow computes z to the (nonnegative integer) power i.
@@ -19,6 +20,22 @@ func pow(z complex128, i int) complex128 {
 	}
 
 	return res
+}
+
+// Orbit computes the result of iterating f starting at z.
+//
+// -1 indicates the orbit is bounded by bound after n_iter, and
+// a nonnegative return indicates that the bound was exceeded after
+// that many iterations.
+func Orbit(f Function, z complex128, bound float64, n int) int {
+	for i := 0; i < n; i++ {
+		if cmplx.Abs(z) >= bound {
+			return i
+		}
+		z = f.Evaluate(z)
+	}
+
+	return -1
 }
 
 // A Function can be evaluated at a complex point.
