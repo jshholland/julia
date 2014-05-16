@@ -1,3 +1,8 @@
+// Copyright © 2014 Josh Holland
+//
+// Part of julia, released under the MIT licence.
+// Full source available at https://github.com/jshholland/julia
+
 package main
 
 import (
