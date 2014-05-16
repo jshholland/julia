@@ -34,7 +34,7 @@ func TestPolyEvaluate(t *testing.T) {
 	}
 	for _, test := range tests {
 		val := f.Evaluate(test.in)
-		t.Logf("testing at %v, got %v", test.in, val)
+		t.Logf("testing %v at %v, got %v", f, test.in, val)
 		if val != test.out {
 			t.Errorf("did not evaluate to expected %v at %v", test.out, test.in)
 		}
