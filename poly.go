@@ -51,10 +51,6 @@ type poly []complex128
 //
 // The degree of the zero polynomial is 0.
 func (f poly) Degree() int {
-	if len(f) == 0 {
-		return 0
-	}
-
 	var deg int
 
 	for i, v := range f {
