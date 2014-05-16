@@ -46,10 +46,6 @@ func (f poly) Degree() int {
 		}
 	}
 
-	if deg != 0 && f[deg] == 0 {
-		return deg - 1
-	}
-
 	return deg
 }
 
