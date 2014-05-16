@@ -69,6 +69,103 @@ func (f poly) IsConstant() bool {
 	return len(f) <= 1
 }
 
+func (f poly) Add(g poly) poly {
+	deg1 := f.Degree()
+	deg2 := g.Degree()
+	var max_deg int
+
+	if deg1 >= deg2 {
+		max_deg = deg1
+	} else {
+		max_deg = deg2
+	}
+
+	res := make([]complex128, max_deg)
+
+	for i := range res {
+		var fi, gi complex128
+
+		if i >= len(f) {
+			fi = 0
+		} else {
+			fi = f[i]
+		}
+
+		if i >= len(g) {
+			gi = 0
+		} else {
+			gi = g[i]
+		}
+
+		res[i] = fi + gi
+	}
+
+	return poly(res)
+}
+
+func (f poly) Negative() poly {
+	res := make([]complex128, len(f))
+
+	for i := range res {
+		res[i] = -f[i]
+	}
+
+	return res
+}
+
+func (f poly) Subtract(g poly) poly {
+	return f.Add(g.Negative())
+}
+
+func (f poly) Multiply(g poly) poly {
+	deg := f.Degree() + g.Degree()
+
+	res := make([]complex128, deg)
+
+	for i := range res {
+		for j := 0; j <= i; j++ {
+			var fj, gi_j complex128
+
+			if j >= len(f) {
+				fj = 0
+			} else {
+				fj = f[j]
+			}
+
+			if i-j >= len(g) {
+				gi_j = 0
+			} else {
+				gi_j = g[i-j]
+			}
+
+			res[i] += fj * gi_j
+		}
+	}
+
+	return res
+}
+
+func (f poly) Equal(g poly) bool {
+	deg1 := f.Degree()
+	deg2 := g.Degree()
+
+	if deg1 != deg2 {
+		return false
+	}
+
+	if deg1 < len(f) {
+		f = f[:deg1+1]
+	}
+
+	for i := range f {
+		if f[i] != g[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (f poly) String() string {
 	var b bytes.Buffer
 

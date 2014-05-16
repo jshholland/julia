@@ -17,6 +17,12 @@ type NormData struct {
 	out []complex128
 }
 
+type ArithData struct {
+	in1 []complex128
+	in2 []complex128
+	out []complex128
+}
+
 func run_tests(f Function, t *testing.T, tests []EvalData) {
 	t.Log("testing", f)
 	for _, test := range tests {
@@ -72,13 +78,50 @@ func TestNormalise(t *testing.T) {
 		out := poly(test.out)
 		norm := in.Normalise()
 		t.Logf("(%v).Normalise() is %v", in, norm)
-		if len(out) != len(norm) {
+		if !norm.Equal(out) {
 			t.Error("did not get expected", out)
 		}
-		for i := range out {
-			if out[i] != norm[i] {
-				t.Error("did not get expected", out)
-			}
+	}
+}
+
+func TestAdd(t *testing.T) {
+	tests := []ArithData{
+		{[]complex128{}, []complex128{}, []complex128{}},
+		{[]complex128{1}, []complex128{}, []complex128{1}},
+		{[]complex128{1}, []complex128{1, 1}, []complex128{2, 1}},
+		{[]complex128{4, 4, 1}, []complex128{1, 2, 3}, []complex128{5, 6, 4}},
+		{[]complex128{2, 1}, []complex128{-5}, []complex128{-3, 1}},
+		{[]complex128{2, 1, 4, 1}, []complex128{1 + 1i}, []complex128{3 + 1i, 1, 4, 1}},
+		{[]complex128{2, 1}, []complex128{-1, 3, -3, 1}, []complex128{1, 4, -3, 1}},
+	}
+	for _, test := range tests {
+		in1 := poly(test.in1)
+		in2 := poly(test.in2)
+		out := poly(test.out)
+		sum := in1.Add(in2)
+		t.Logf("%v + %v = %v", in1, in2, sum)
+		if !sum.Equal(out) {
+
+		}
+	}
+}
+
+func TestMultiply(t *testing.T) {
+	tests := []ArithData{
+		{[]complex128{}, []complex128{}, []complex128{}},
+		{[]complex128{1}, []complex128{}, []complex128{}},
+		{[]complex128{1}, []complex128{1, 1}, []complex128{1, 1}},
+		{[]complex128{4, 4, 1}, []complex128{1, 2, 1}, []complex128{4, 12, 13, 6, 1}},
+		{[]complex128{1, -2, 1}, []complex128{1, 1, 1, 1}, []complex128{1, 1, 0, 0, -1, 1}},
+	}
+	for _, test := range tests {
+		in1 := poly(test.in1)
+		in2 := poly(test.in2)
+		out := poly(test.out)
+		prod := in1.Multiply(in2)
+		t.Logf("(%v) * (%v) = %v", in1, in2, prod)
+		if !prod.Equal(out) {
+
 		}
 	}
 }
