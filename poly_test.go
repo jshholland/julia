@@ -101,7 +101,7 @@ func TestAdd(t *testing.T) {
 		sum := in1.Add(in2)
 		t.Logf("%v + %v = %v", in1, in2, sum)
 		if !sum.Equal(out) {
-
+			t.Error("did not get expected", out)
 		}
 	}
 }
@@ -121,7 +121,7 @@ func TestMultiply(t *testing.T) {
 		prod := in1.Multiply(in2)
 		t.Logf("(%v) * (%v) = %v", in1, in2, prod)
 		if !prod.Equal(out) {
-
+			t.Error("did not get expected", out)
 		}
 	}
 }
