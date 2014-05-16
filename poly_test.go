@@ -2,30 +2,42 @@ package main
 
 import "testing"
 
-func check_eval(f Function, t *testing.T, points, vals []complex128) {
-	if len(points) != len(vals) {
-		panic("len(points) != len(vals)")
-	}
+type Test struct {
+	in  complex128
+	out complex128
+}
 
-	for i, z := range points {
-		val := f.Evaluate(z)
-		t.Logf("testing at %v, got %v", z, val)
-		if val != vals[i] {
-			t.Errorf("did not evaluate to expected %v at %v", vals[i], z)
+func run_tests(f Function, t *testing.T, tests []Test) {
+	t.Log("testing", f)
+	for _, test := range tests {
+		val := f.Evaluate(test.in)
+		t.Logf("testing at %v, got %v", test.in, val)
+		if val != test.out {
+			t.Errorf("did not evaluate to expected %v at %v", test.out, test.in)
 		}
 	}
 }
 
 func TestConstantZero(t *testing.T) {
 	c := constant(0)
-	points := []complex128{0, 1, 1i, 1 + 1i, 200 - 50i}
-	vals := []complex128{0, 0, 0, 0, 0}
-	check_eval(c, t, points, vals)
+	tests := []Test{
+		{0, 0},
+		{1, 0},
+		{1i, 0},
+		{1 + 1i, 0},
+		{200 - 50i, 0},
+	}
+	run_tests(c, t, tests)
 }
 
 func TestPolyIntegers(t *testing.T) {
 	f := NewPoly(1, 2, 1)
-	points := []complex128{0, 1, 1i, 1 + 1i, 2 - 3i}
-	vals := []complex128{1, 4, 2i, 3 + 4i, -18i}
-	check_eval(f, t, points, vals)
+	tests := []Test{
+		{0, 1},
+		{1, 4},
+		{1i, 2i},
+		{1 + 1i, 3 + 4i},
+		{2 - 3i, -18i},
+	}
+	run_tests(f, t, tests)
 }
