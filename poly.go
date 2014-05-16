@@ -21,13 +21,13 @@ func pow(z complex128, i int) complex128 {
 	return res
 }
 
-// A Function can be evaluated at a complex point
+// A Function can be evaluated at a complex point.
 type Function interface {
-	// evaluate computes the value of the function at z
+	// evaluate computes the value of the function at z.
 	Evaluate(z complex128) complex128
 }
 
-// A constant represents a constant function
+// A constant represents a constant function.
 type constant complex128
 
 func (c constant) String() string {
@@ -73,16 +73,14 @@ func (f poly) Evaluate(z complex128) complex128 {
 	return res
 }
 
-// NewPoly returns a Function coefficients coeffs, starting with the constant term
+// NewPoly returns a Function coefficients coeffs, starting with the constant term.
 func NewPoly(coeffs ...complex128) Function {
 	return poly(coeffs)
 }
 
-// A rat is a rational function
+// A rat is a rational function.
 type rat struct {
-	// coeffs for the numerator, starting with the constant term
-	numerator poly
-	// coeffs for the denominator, as for numerator
+	numerator   poly
 	denominator poly
 }
 
