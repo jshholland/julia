@@ -57,7 +57,7 @@ func Draw(f Function, re_from, re_to, im_from, im_to float64, pix_size float64) 
 			if o < 0 {
 				m.Set(x, y, color.Black)
 			} else {
-				m.Set(x, y, color.White)
+				m.Set(x, y, color.Gray16{uint16(o * 0x10000 / 32)})
 			}
 		}
 	}
